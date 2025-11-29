@@ -9,12 +9,23 @@ public final class Configuration {
     private final int max; 
     private final int min;
     private final int attempts;
+    private final ConfigurationLoader loader;
+    private final static String file = "src/main/resources/config.yml";
 
     private Configuration(final int max, final int min, final int attempts) {
         this.max = max;
         this.min = min;
         this.attempts = attempts;
+        this.loader = null;
     }
+
+    public Configuration() {
+        this.loader = new ConfigurationLoader(file);
+        this.max = loader.getMax();
+        this.min = loader.getMin();
+        this.attempts = loader.getAttempts();
+    }
+
 
     /**
      * @return the maximum value
@@ -43,6 +54,7 @@ public final class Configuration {
     public boolean isConsistent() {
         return attempts > 0 && min < max;
     }
+
 
     /**
      * Pattern builder: used here because:
